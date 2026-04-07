@@ -1,0 +1,117 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String     @id @default(cuid())
+  email     String     @unique
+  name      String?
+  password  String?
+  role      Role       @default(VISITOR)
+  createdAt DateTime   @default(now())
+  donations Donation[]
+  tickets   Ticket[]
+}
+
+model Event {
+  id          String       @id @default(cuid())
+  title       String
+  description String
+  startDate   DateTime
+  location    String?
+  capacity    Int?
+  imageUrl    String?
+  createdAt   DateTime     @default(now())
+  tickets     Ticket[]
+  ticketTypes TicketType[]
+}
+
+model TicketType {
+  id       String   @id @default(cuid())
+  name     String
+  price    Decimal
+  quantity Int
+  eventId  String
+  tickets  Ticket[]
+  event    Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+}
+
+model Ticket {
+  id           String       @id @default(cuid())
+  qrCode       String       @unique @default(cuid())
+  status       TicketStatus @default(PENDING)
+  userId       String
+  eventId      String
+  ticketTypeId String
+  createdAt    DateTime     @default(now())
+  payment      Payment?
+  event        Event        @relation(fields: [eventId], references: [id])
+  ticketType   TicketType   @relation(fields: [ticketTypeId], references: [id])
+  user         User         @relation(fields: [userId], references: [id])
+}
+
+model Payment {
+  id         String        @id @default(cuid())
+  amount     Decimal
+  currency   String        @default("XOF")
+  method     PaymentMethod
+  status     PaymentStatus @default(PENDING)
+  externalId String?
+  ticketId   String?       @unique
+  donationId String?       @unique
+  createdAt  DateTime      @default(now())
+  donation   Donation?     @relation(fields: [donationId], references: [id])
+  ticket     Ticket?       @relation(fields: [ticketId], references: [id])
+}
+
+model Donation {
+  id        String   @id @default(cuid())
+  amount    Decimal
+  currency  String   @default("XOF")
+  userId    String?
+  createdAt DateTime @default(now())
+  user      User?    @relation(fields: [userId], references: [id])
+  payment   Payment?
+}
+
+model Teaching {
+  id          String   @id @default(cuid())
+  title       String
+  youtubeUrl  String?
+  pdfUrl      String?
+  publishedAt DateTime @default(now())
+}
+
+model Newsletter {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+}
+
+enum Role {
+  VISITOR
+  ADMIN
+}
+
+enum TicketStatus {
+  PENDING
+  PAID
+  USED
+  CANCELLED
+}
+
+enum PaymentMethod {
+  STRIPE
+  CINETPAY
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
