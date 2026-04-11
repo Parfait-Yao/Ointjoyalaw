@@ -13,7 +13,7 @@ export default async function AdminTicketsPage() {
   })
 
   // Format array to match TickstTable props interface
-  const formattedTickets = tickets.map(t => ({
+  const formattedTickets = tickets.map((t: any) => ({
     ...t,
     status: t.status as "PENDING" | "PAID" | "USED" | "CANCELLED",
     ticketType: {

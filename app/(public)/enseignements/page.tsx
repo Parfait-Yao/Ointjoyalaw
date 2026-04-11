@@ -8,7 +8,7 @@ export default async function EnseignementsPage() {
   })
 
   // Serialize dates for Client Component
-  const serializedTeachings = teachings.map(t => ({
+  const serializedTeachings = teachings.map((t: any) => ({
     ...t,
     publishedAt: t.publishedAt.toISOString(),
   }))

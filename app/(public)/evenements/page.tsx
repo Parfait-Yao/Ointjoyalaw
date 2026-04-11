@@ -8,7 +8,7 @@ export default async function PublicEventsPage() {
   })
 
   // We pass serializable data to the client component
-  const serializedEvents = events.map(event => ({
+  const serializedEvents = events.map((event: any) => ({
     ...event,
     startDate: event.startDate.toISOString(),
     createdAt: event.createdAt.toISOString(),

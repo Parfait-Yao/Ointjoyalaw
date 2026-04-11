@@ -11,7 +11,7 @@ export default async function AdminPaymentsPage() {
     take: 100
   })
 
-  const formattedPayments = payments.map(p => ({
+  const formattedPayments = payments.map((p: any) => ({
     ...p,
     status: p.status as "PENDING" | "COMPLETED" | "FAILED",
     amount: Number(p.amount)
