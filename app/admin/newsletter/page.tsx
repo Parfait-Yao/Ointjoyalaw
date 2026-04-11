@@ -14,7 +14,7 @@ export default async function AdminNewsletterPage() {
           <p className="text-sm text-gray-500 mt-0.5">{subscribers.length} abonné(s) au total.</p>
         </div>
         <a
-          href={`data:text/csv;charset=utf-8,Email,Date\n${subscribers.map(s => `${s.email},${s.createdAt.toISOString()}`).join("\n")}`}
+          href={`data:text/csv;charset=utf-8,Email,Date\n${subscribers.map((s: any) => `${s.email},${s.createdAt.toISOString()}`).join("\n")}`}
           download="newsletter-abonnes.csv"
           className="inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-gray-700 text-sm font-medium rounded-xl px-4 py-2.5 border border-gray-200 transition-colors"
         >
@@ -41,7 +41,7 @@ export default async function AdminNewsletterPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
-              {subscribers.map((sub, i) => (
+              {subscribers.map((sub: any, i: number) => (
                 <tr key={sub.id} className="hover:bg-gray-50/50 transition-colors">
                   <td className="px-6 py-4 text-sm text-gray-400">{i + 1}</td>
                   <td className="px-6 py-4">

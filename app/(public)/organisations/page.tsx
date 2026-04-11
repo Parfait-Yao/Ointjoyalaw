@@ -92,7 +92,7 @@ export default function OrganisationsPage() {
       <section className="py-20 overflow-hidden bg-white">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap justify-center gap-4 md:gap-6 items-start">
-            {cloudImages.map((img, idx) => (
+            {cloudImages.map((img: any, idx: number) => (
               <div
                 key={idx}
                 className={`relative ${img.height} w-32 md:w-48 rounded-[2rem] overflow-hidden shadow-2xl transform transition-transform duration-1000 hover:scale-105 active:scale-95 ${img.mt} animate-float`}
@@ -116,13 +116,13 @@ export default function OrganisationsPage() {
         <div className="container mx-auto px-4">
           {/* Testimonials Style - Organization Grid */}
           <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-            {organizations.map((org, idx) => (
+            {organizations.map((org: any, idx: number) => (
               <div
                 key={idx}
                 className="bg-white p-8 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] border border-gray-100 text-left flex flex-col items-start hover:shadow-[0_40px_80px_rgba(59,10,104,0.08)] transition-all duration-500 group"
               >
                 <div className="flex gap-1 mb-6">
-                  {[1, 2, 3, 4, 5].map(i => (
+                  {[1, 2, 3, 4, 5].map((i: number) => (
                     <Star key={i} className="h-4 w-4 fill-[#d4af37] text-[#d4af37]" />
                   ))}
                 </div>

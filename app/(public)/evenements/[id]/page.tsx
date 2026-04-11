@@ -96,7 +96,7 @@ export default async function EventDetailsPage({ params }: { params: { id: strin
             {!isPast && event.ticketTypes.length > 0 && (
               <div className="space-y-3 mt-4">
                 <p className="text-sm font-semibold text-gray-700">Tarifs :</p>
-                {event.ticketTypes.map(tt => (
+                {event.ticketTypes.map((tt: any) => (
                   <div key={tt.id} className="flex justify-between items-center text-sm border p-2 rounded bg-gray-50">
                     <span>{tt.name}</span>
                     <span className="font-bold">{Number(tt.price).toLocaleString()} FCFA</span>

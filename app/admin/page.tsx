@@ -86,7 +86,7 @@ export default async function AdminDashboard() {
             {recentEvents.length === 0 ? (
               <p className="text-sm text-gray-400 px-6 py-8 text-center">Aucun événement</p>
             ) : (
-              recentEvents.map((event) => (
+              recentEvents.map((event: any) => (
                 <div key={event.id} className="flex items-center justify-between px-6 py-3 hover:bg-gray-50/50">
                   <div className="min-w-0">
                     <p className="text-sm font-medium text-gray-800 truncate">{event.title}</p>
@@ -115,7 +115,7 @@ export default async function AdminDashboard() {
             {recentDonations.length === 0 ? (
               <p className="text-sm text-gray-400 px-6 py-8 text-center">Aucun don</p>
             ) : (
-              recentDonations.map((don) => (
+              recentDonations.map((don: any) => (
                 <div key={don.id} className="flex items-center justify-between px-6 py-3 hover:bg-gray-50/50">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-xs font-bold text-emerald-700">

@@ -278,7 +278,7 @@ export default function LeaderPage() {
             Un ministère qui fait la différence
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((s) => (
+            {stats.map((s: any) => (
               <div key={s.label} className="text-center group">
                 <div className="text-4xl md:text-5xl font-bold text-[#3b0a68] mb-2 group-hover:text-[#d4af37] transition-colors duration-300">
                   {s.value}
@@ -310,7 +310,7 @@ export default function LeaderPage() {
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {pillars.map((p) => {
+            {pillars.map((p: any) => {
               const Icon = p.icon
               return (
                 <div
@@ -409,7 +409,7 @@ export default function LeaderPage() {
 
           {/* Other members — grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
-            {team.slice(1).map((member) => (
+            {team.slice(1).map((member: any) => (
               <div
                 key={member.name}
                 className="group bg-white border border-gray-100 rounded-2xl overflow-hidden hover:border-[#3b0a68]/20 hover:shadow-xl hover:shadow-purple-100/50 transition-all duration-300"
@@ -473,7 +473,7 @@ export default function LeaderPage() {
             </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {programs.map((prog) => (
+            {programs.map((prog: any) => (
               <div
                 key={prog.title}
                 className={`relative rounded-2xl overflow-hidden min-h-[280px] flex flex-col justify-end p-7 bg-gradient-to-t ${prog.color} border border-white/10 hover:border-[#d4af37]/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-purple-900/40 group`}
@@ -510,7 +510,7 @@ export default function LeaderPage() {
             </h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
-            {audiences.map((a) => {
+            {audiences.map((a: any) => {
               const Icon = a.icon
               return (
                 <div

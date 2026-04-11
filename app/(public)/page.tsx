@@ -88,7 +88,7 @@ export default async function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            {teachings.map(teaching => (
+            {teachings.map((teaching: any) => (
               <TeachingCard key={teaching.id} {...teaching} />
             ))}
           </div>
@@ -128,7 +128,7 @@ export default async function HomePage() {
               { name: "Pasteure Adjointe", role: "Responsable Adoration", image: "/images/team-female.png" },
               { name: "Pasteur des Jeunes", role: "Responsable Jeunesse", image: "/images/team-male.png" },
               { name: "Évangéliste Principal", role: "Responsable Missions", image: "/images/team-male.png" },
-            ].map((member) => (
+            ].map((member: any) => (
               <div key={member.name} className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100">
                 <div className="relative h-64 w-full">
                   <Image src={member.image} alt={member.name} fill className="object-cover object-top group-hover:scale-105 transition-transform duration-500" />
@@ -155,7 +155,7 @@ export default async function HomePage() {
         <div className="container mx-auto px-4 md:px-6">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-12 text-center">Nos Organisations Affiliées</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {organizations.map(org => (
+            {organizations.map((org: any) => (
               <OrganizationCard key={org.acronym} {...org} />
             ))}
           </div>
