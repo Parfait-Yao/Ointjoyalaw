@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma"
-import { PaymentMethod } from "@/app/generated/prisma/client"
+import { PaymentMethod } from "@prisma/client"
 import { stripe } from "@/lib/payments/stripe"
 import { initializeCinetPayPayment } from "@/lib/payments/cinetpay"
 
