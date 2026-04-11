@@ -1,6 +1,5 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../app/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -21,11 +20,12 @@ model User {
 model Event {
   id          String       @id @default(cuid())
   title       String
-  description String
+  description String?
   startDate   DateTime
   location    String?
   capacity    Int?
   imageUrl    String?
+  category    String?
   createdAt   DateTime     @default(now())
   tickets     Ticket[]
   ticketTypes TicketType[]
@@ -83,7 +83,10 @@ model Teaching {
   id          String   @id @default(cuid())
   title       String
   youtubeUrl  String?
+  videoUrl    String?
+  imageUrl    String?
   pdfUrl      String?
+  category    String?  @default("Foi")
   publishedAt DateTime @default(now())
 }
 

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next-response"
+import { NextRequest, NextResponse } from "next/server"
 import { stripe } from "@/lib/payments/stripe"
 import { prisma } from "@/lib/prisma"
 import { validateTicket } from "@/services/ticket.service"

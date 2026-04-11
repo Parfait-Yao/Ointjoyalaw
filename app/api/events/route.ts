@@ -15,6 +15,8 @@ export async function GET() {
   }
 }
 
+import { uploadImageBuffer } from "@/lib/cloudinary"
+
 export async function POST(req: Request) {
   try {
     const session = await getServerSession(authOptions)
@@ -22,17 +24,36 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const json = await req.json()
-    const { title, description, startDate, location, capacity, imageUrl } = json
+    const formData = await req.formData()
+    const title = formData.get("title") as string
+    const description = formData.get("description") as string | null
+    const startDate = formData.get("startDate") as string
+    const location = formData.get("location") as string | null
+    const capacity = formData.get("capacity") as string | null
+    const imageFile = formData.get("image") as File | null
+    const category = formData.get("category") as string | null
+
+    if (!title || !startDate) {
+      return NextResponse.json({ error: "Champs obligatoires manquants" }, { status: 400 })
+    }
+
+    let imageUrl = null
+
+    if (imageFile && imageFile.size > 0) {
+      const bytes = await imageFile.arrayBuffer()
+      const buffer = Buffer.from(bytes)
+      imageUrl = await uploadImageBuffer(buffer, "church-events")
+    }
 
     const event = await prisma.event.create({
       data: {
         title,
-        description,
+        description: description || null,
         startDate: new Date(startDate),
-        location,
+        location: location || null,
         capacity: capacity ? parseInt(capacity) : null,
         imageUrl,
+        category: category || "Autre",
       }
     })
 
