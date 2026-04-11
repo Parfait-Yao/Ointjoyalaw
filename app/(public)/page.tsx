@@ -8,6 +8,8 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
 
+export const dynamic = "force-dynamic"
+
 export default async function HomePage() {
   const events = await prisma.event.findMany({
     where: { startDate: { gte: new Date() } },

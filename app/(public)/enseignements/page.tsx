@@ -2,6 +2,8 @@ import { prisma } from "@/lib/prisma"
 import { Video, GraduationCap, Sparkles } from "lucide-react"
 import { TeachingsGrid } from "@/components/public/TeachingsGrid"
 
+export const dynamic = "force-dynamic"
+
 export default async function EnseignementsPage() {
   const teachings = await prisma.teaching.findMany({
     orderBy: { publishedAt: "desc" }

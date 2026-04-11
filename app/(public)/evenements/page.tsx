@@ -2,6 +2,8 @@ import { prisma } from "@/lib/prisma"
 import { Calendar, Bell, Sparkles } from "lucide-react"
 import { EventsGrid } from "@/components/public/EventsGrid"
 
+export const dynamic = "force-dynamic"
+
 export default async function PublicEventsPage() {
   const events = await prisma.event.findMany({
     orderBy: { startDate: "asc" }

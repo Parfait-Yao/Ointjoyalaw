@@ -6,6 +6,8 @@ import { fr } from "date-fns/locale"
 import { notFound } from "next/navigation"
 import Link from "next/link"
 
+export const dynamic = "force-dynamic"
+
 export default async function EventDetailsPage({ params }: { params: { id: string } }) {
   const { id } = await params
   const event = await prisma.event.findUnique({
