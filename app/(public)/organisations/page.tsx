@@ -46,7 +46,7 @@ export default function OrganisationsPage() {
     <div className="bg-white min-h-screen">
 
       {/* ── PURPLE LUXE BANNER ────────────────────────────── */}
-      <section className="relative h-[450px] flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-[400px] md:h-[450px] flex items-center justify-center overflow-hidden pt-24 pb-12 md:pt-0 md:pb-0">
         {/* Background Layer */}
         <div className="absolute inset-0 bg-[#3b0a68]" />
         <div className="absolute inset-0 bg-gradient-to-r from-[#3b0a68] via-[#3b0a68]/95 to-transparent z-10" />
@@ -64,7 +64,7 @@ export default function OrganisationsPage() {
             </span>
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6 leading-[1.1] animate-fade-in">
+          <h1 className="text-4xl md:text-7xl font-extrabold text-white mb-6 leading-[1.1] animate-fade-in">
             Faire briller la <span className="text-[#d4af37]">Lumière</span> <br />
             <span className="font-light italic text-white/60">de Christ</span>
           </h1>

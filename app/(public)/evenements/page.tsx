@@ -27,7 +27,7 @@ export default async function PublicEventsPage() {
   return (
     <div className="bg-white min-h-screen">
       {/* ── HIGH-END HEADER BANNER ─────────────────────────── */}
-      <section className="relative h-[450px] flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-[400px] md:h-[450px] flex items-center justify-center overflow-hidden pt-24 pb-12 md:pt-0 md:pb-0">
         {/* Background Layer with dual gradients */}
         <div className="absolute inset-0 bg-[#3b0a68]" />
         <div className="absolute inset-0 bg-gradient-to-r from-[#3b0a68] via-[#3b0a68]/90 to-transparent z-10" />
@@ -51,7 +51,7 @@ export default async function PublicEventsPage() {
                 </span>
             </div>
             
-            <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6 leading-[1.1]">
+            <h1 className="text-4xl md:text-7xl font-extrabold text-white mb-6 leading-[1.1]">
                 Annonce <span className="text-[#d4af37]">d&apos;Évènements</span>
             </h1>
             

@@ -13,15 +13,18 @@ export default async function AdminEventsPage() {
   })
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Événements</h1>
-          <p className="text-gray-500">Gestion de vos événements et de leurs capacités.</p>
+    <div className="space-y-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+        <div className="space-y-1">
+          <h1 className="text-2xl md:text-3xl font-black text-gray-900 tracking-tight">Événements</h1>
+          <p className="text-sm text-gray-500">Gestion de vos événements et de leurs capacités.</p>
         </div>
-        <Button className="bg-purple-800 hover:bg-purple-900" render={<Link href="/admin/evenements/nouveau" />}>
-          <Plus className="mr-2 h-4 w-4" /> Nouvel Événement
-        </Button>
+        <Link
+          href="/admin/evenements/nouveau"
+          className="inline-flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold uppercase tracking-widest rounded-xl px-6 py-3.5 transition-all shadow-lg shadow-purple-600/20 active:scale-95 whitespace-nowrap"
+        >
+          <Plus className="w-4 h-4" /> Nouvel Événement
+        </Link>
       </div>
 
       <EventsTable events={events} />

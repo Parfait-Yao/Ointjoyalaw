@@ -33,25 +33,25 @@ export default async function AdminDashboard() {
   const totalDons = Number(donationsSum._sum.amount || 0)
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 md:space-y-10">
       {/* Welcome */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+        <div className="space-y-1">
+          <h1 className="text-2xl md:text-3xl font-black text-gray-900 tracking-tight">
             Bonjour, {session?.user?.name?.split(" ")[0] ?? "Admin"} 👋
           </h1>
-          <p className="text-sm text-gray-500 mt-0.5">Voici le résumé de l'activité du ministère.</p>
+          <p className="text-sm text-gray-500">Voici le résumé de l'activité du ministère.</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex items-center gap-3">
           <Link
             href="/admin/evenements/nouveau"
-            className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-xl px-4 py-2.5 transition-colors shadow-sm shadow-purple-200"
+            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold uppercase tracking-widest rounded-xl px-5 py-3.5 transition-all shadow-lg shadow-purple-600/20 active:scale-95"
           >
             <Plus className="w-4 h-4" /> Événement
           </Link>
           <Link
             href="/admin/enseignements/nouveau"
-            className="inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-gray-700 text-sm font-medium rounded-xl px-4 py-2.5 border border-gray-200 transition-colors"
+            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-gray-700 text-xs font-bold uppercase tracking-widest rounded-xl px-5 py-3.5 border border-gray-200 transition-all active:scale-95"
           >
             <Plus className="w-4 h-4" /> Enseignement
           </Link>

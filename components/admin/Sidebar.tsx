@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation"
 import { signOut, useSession } from "next-auth/react"
 import {
   LayoutDashboard, Calendar, Ticket, CreditCard,
-  Mail, LogOut, BookOpen, Users, ChevronRight, Cross, ExternalLink
+  Mail, LogOut, BookOpen, Users, ChevronRight, Cross, ExternalLink, X
 } from "lucide-react"
 
 const navGroups = [
@@ -37,25 +37,48 @@ const navGroups = [
   },
 ]
 
+import { useAdminSidebar } from "./AdminSidebarContext"
+
 export function Sidebar() {
   const pathname = usePathname()
   const { data: session } = useSession()
+  const { isOpen, close } = useAdminSidebar()
 
   const isActive = (href: string, exact?: boolean) =>
     exact ? pathname === href : pathname?.startsWith(href)
 
   return (
-    <aside className="w-64 bg-[#0f0a1e] border-r border-white/5 text-white min-h-screen flex flex-col hidden md:flex shrink-0">
-      {/* Logo */}
-      <div className="h-16 flex items-center gap-3 px-5 border-b border-white/5">
-        <div className="w-8 h-8 rounded-lg bg-purple-600 flex items-center justify-center shadow-lg shadow-purple-900/50">
-          <Cross className="w-4 h-4 text-white" />
+    <>
+      {/* Backdrop for mobile */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden animate-in fade-in duration-300"
+          onClick={close}
+        />
+      )}
+
+      <aside
+        className={`
+          w-64 bg-[#0f0a1e] border-r border-white/5 text-white min-h-screen flex flex-col 
+          fixed md:relative z-50 md:z-0
+          transition-transform duration-300 ease-in-out
+          ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
+          shrink-0
+        `}
+      >
+        {/* Logo */}
+        <div className="h-16 flex items-center gap-3 px-5 border-b border-white/5 shrink-0">
+          <div className="w-8 h-8 rounded-lg bg-purple-600 flex items-center justify-center shadow-lg shadow-purple-900/50">
+            <Cross className="w-4 h-4 text-white" />
+          </div>
+          <div className="leading-tight flex-1">
+            <p className="font-bold text-sm text-white">OJM Admin</p>
+            <p className="text-[10px] text-purple-400 tracking-widest uppercase">Ministries</p>
+          </div>
+          <button onClick={close} className="md:hidden p-2 text-white/40 hover:text-white">
+            <X className="w-5 h-5" />
+          </button>
         </div>
-        <div className="leading-tight">
-          <p className="font-bold text-sm text-white">OJM Admin</p>
-          <p className="text-[10px] text-purple-400 tracking-widest uppercase">Ministries</p>
-        </div>
-      </div>
 
       {/* Navigation */}
       <nav className="flex-1 py-6 px-3 space-y-6 overflow-y-auto">
@@ -119,5 +142,6 @@ export function Sidebar() {
         </button>
       </div>
     </aside>
+    </>
   )
 }

@@ -175,7 +175,7 @@ export default function LeaderPage() {
     <div className="overflow-x-hidden">
 
       {/* ── PREMIUM LEADER HERO ─────────────────────────── */}
-      <section className="relative min-h-[92vh] flex items-center justify-center overflow-hidden bg-[#0f0224]">
+      <section className="relative min-h-[85vh] md:min-h-[92vh] flex items-center justify-center overflow-hidden bg-[#0f0224]">
         {/* Complex Backdrop Layer */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#0f0224] via-[#1a043a] to-[#2d0852]" />
         
@@ -188,7 +188,7 @@ export default function LeaderPage() {
         <div className="absolute inset-0 z-0 opacity-[0.03] bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]" />
 
         <div className="container relative z-10 mx-auto px-6 md:px-12 lg:px-24">
-          <div className="flex flex-col lg:flex-row items-center justify-center gap-16 lg:gap-24 py-16">
+          <div className="flex flex-col lg:flex-row items-center justify-center gap-16 lg:gap-24 pt-28 pb-16 md:py-16">
             
             {/* 1. TEXT CONTENT - Centered or Padded */}
             <div className="flex-1 text-center lg:text-left order-2 lg:order-1">
@@ -199,7 +199,7 @@ export default function LeaderPage() {
                 </span>
               </div>
               
-              <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-[1.05] mb-6 tracking-tight">
+              <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-black text-white leading-[1.05] mb-6 tracking-tight">
                 Visionnaire <br/>
                 <span className="text-[#d4af37]">Titulaire</span>
               </h1>

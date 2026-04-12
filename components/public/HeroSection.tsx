@@ -7,7 +7,7 @@ export function HeroSection() {
     <section className="relative w-full min-h-screen bg-white overflow-hidden flex flex-col">
 
       {/* ── Main hero area ─────────────────────────── */}
-      <div className="flex-1 flex flex-col lg:flex-row items-center px-6 md:px-10 lg:px-16 pt-12 pb-6 gap-10 lg:gap-0 max-w-[1400px] mx-auto w-full">
+      <div className="flex-1 flex flex-col lg:flex-row items-center px-6 md:px-10 lg:px-16 pt-28 pb-6 md:pt-12 gap-10 lg:gap-0 max-w-[1400px] mx-auto w-full">
 
         {/* ── Left: Text ─────────────────────────────── */}
         <div className="flex-1 z-10 lg:pr-10">
@@ -20,10 +20,10 @@ export function HeroSection() {
           </div>
 
           {/* Headline — split like the reference */}
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-light leading-[1.05] text-gray-900 mb-2">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light leading-[1.05] text-gray-900 mb-2">
             Découvrez la Joie
           </h1>
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold leading-[1.05] text-[#3b0a68] mb-7">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-[1.05] text-[#3b0a68] mb-7">
             de l&apos;Évangile
           </h1>
 

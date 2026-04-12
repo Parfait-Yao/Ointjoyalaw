@@ -7,16 +7,16 @@ export default async function AdminNewsletterPage() {
   const subscribers = await prisma.newsletter.findMany({ orderBy: { createdAt: "desc" } })
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Newsletter</h1>
-          <p className="text-sm text-gray-500 mt-0.5">{subscribers.length} abonné(s) au total.</p>
+    <div className="space-y-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+        <div className="space-y-1">
+          <h1 className="text-2xl md:text-3xl font-black text-gray-900 tracking-tight">Newsletter</h1>
+          <p className="text-sm text-gray-500">{subscribers.length} abonné(s) au total.</p>
         </div>
         <a
           href={`data:text/csv;charset=utf-8,Email,Date\n${subscribers.map((s: any) => `${s.email},${s.createdAt.toISOString()}`).join("\n")}`}
           download="newsletter-abonnes.csv"
-          className="inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-gray-700 text-sm font-medium rounded-xl px-4 py-2.5 border border-gray-200 transition-colors"
+          className="inline-flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-gray-700 text-xs font-bold uppercase tracking-widest rounded-xl px-5 py-3.5 border border-gray-200 transition-all active:scale-95 shadow-sm whitespace-nowrap"
         >
           <Download className="w-4 h-4" /> Exporter CSV
         </a>
