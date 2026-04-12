@@ -3,8 +3,7 @@ import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/lib/auth"
-import { writeFile } from "fs/promises"
-import path from "path"
+import { uploadImageBuffer, uploadVideoBuffer, uploadPdfBuffer } from "@/lib/cloudinary"
 
 export async function GET() {
   const teachings = await prisma.teaching.findMany({
@@ -36,31 +35,22 @@ export async function POST(req: Request) {
     let finalPdfUrl = null
     let finalImageUrl = null
 
-    // Handling Image Upload
+    // Handling Image Upload to Cloudinary
     if (imageFile && imageFile.size > 0) {
       const buffer = Buffer.from(await imageFile.arrayBuffer())
-      const filename = `${Date.now()}-${imageFile.name.replaceAll(" ", "_")}`
-      const uploadDir = path.join(process.cwd(), "public/uploads/images")
-      await writeFile(path.join(uploadDir, filename), buffer)
-      finalImageUrl = `/uploads/images/${filename}`
+      finalImageUrl = await uploadImageBuffer(buffer, "church/teachings/images")
     }
 
-    // Handing Video Upload
+    // Handling Video Upload to Cloudinary
     if (videoFile && videoFile.size > 0) {
       const buffer = Buffer.from(await videoFile.arrayBuffer())
-      const filename = `${Date.now()}-${videoFile.name.replaceAll(" ", "_")}`
-      const uploadDir = path.join(process.cwd(), "public/uploads/videos")
-      await writeFile(path.join(uploadDir, filename), buffer)
-      finalVideoUrl = `/uploads/videos/${filename}`
+      finalVideoUrl = await uploadVideoBuffer(buffer, "church/teachings/videos")
     }
 
-    // Handling PDF Upload
+    // Handling PDF Upload to Cloudinary
     if (pdfFile && pdfFile.size > 0) {
       const buffer = Buffer.from(await pdfFile.arrayBuffer())
-      const filename = `${Date.now()}-${pdfFile.name.replaceAll(" ", "_")}`
-      const uploadDir = path.join(process.cwd(), "public/uploads/pdfs")
-      await writeFile(path.join(uploadDir, filename), buffer)
-      finalPdfUrl = `/uploads/pdfs/${filename}`
+      finalPdfUrl = await uploadPdfBuffer(buffer, "church/teachings/pdfs")
     } else if (pdfUrlInput) {
       finalPdfUrl = pdfUrlInput
     }
