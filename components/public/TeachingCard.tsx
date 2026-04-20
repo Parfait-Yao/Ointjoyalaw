@@ -29,16 +29,21 @@ export function TeachingCard({
   category, 
   publishedAt 
 }: TeachingProps) {
+  const [mounted, setMounted] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [liked, setLiked] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
   
-  const date = new Date(publishedAt).toLocaleDateString("fr-FR", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  })
-
-
+  const date = mounted 
+    ? new Date(publishedAt).toLocaleDateString("fr-FR", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      })
+    : ""
 
   const ytId = getYoutubeId(youtubeUrl)
   const ytThumbnail = ytId ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` : null

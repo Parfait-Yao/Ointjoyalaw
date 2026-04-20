@@ -1,5 +1,5 @@
 "use client"
-
+import * as React from "react"
 import Link from "next/link"
 import { Calendar, MapPin, ArrowRight } from "lucide-react"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
@@ -19,9 +19,15 @@ interface EventProps {
 }
 
 export function EventCard({ id, title, description, startDate, location, imageUrl, category, organizations = [] }: EventProps) {
+  const [mounted, setMounted] = React.useState(false)
+  React.useEffect(() => {
+    setMounted(true)
+  }, [])
+
   const date = new Date(startDate)
-  const day = format(date, "dd")
-  const month = format(date, "MMM", { locale: fr }).replace('.', '')
+  const day = mounted ? format(date, "dd") : "--"
+  const month = mounted ? format(date, "MMM", { locale: fr }).replace('.', '') : "..."
+  const fullDate = mounted ? format(date, "iiii d MMMM 'à' HH:mm", { locale: fr }) : "..."
 
   return (
     <div className="group relative bg-white rounded-[2.5rem] border border-gray-100 shadow-[0_10px_40px_rgba(0,0,0,0.02)] hover:shadow-[0_40px_80px_rgba(59,10,104,0.15)] transition-all duration-700 hover:-translate-y-3 overflow-hidden flex flex-col h-full">
@@ -86,7 +92,7 @@ export function EventCard({ id, title, description, startDate, location, imageUr
              </div>
              <div>
                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-none mb-1">Horaire</p>
-                <p className="text-sm font-bold text-gray-700 capitalize">{format(date, "iiii d MMMM 'à' HH:mm", { locale: fr })}</p>
+                <p className="text-sm font-bold text-gray-700 capitalize">{fullDate}</p>
              </div>
           </div>
           

@@ -19,8 +19,18 @@ export default async function HomePage() {
   })
 
   const events = eventsData.map(e => ({
-    ...e,
+    id: e.id,
+    title: e.title,
+    description: e.description,
     startDate: e.startDate.toISOString(),
+    location: e.location,
+    imageUrl: e.imageUrl,
+    category: e.category,
+    organizations: e.organizations.map(org => ({
+      id: org.id,
+      name: org.name,
+      acronym: org.acronym
+    }))
   }))
 
   // Real teachings from DB
@@ -29,9 +39,14 @@ export default async function HomePage() {
     take: 4,
   })
 
-  // Serialize dates for Client Components
+  // Serialize and clean teachings for Client Components
   const teachings = teachingsData.map(t => ({
-    ...t,
+    id: t.id,
+    title: t.title,
+    youtubeUrl: t.youtubeUrl,
+    videoUrl: t.videoUrl,
+    imageUrl: t.imageUrl,
+    category: t.category,
     publishedAt: t.publishedAt.toISOString(),
   }))
 
