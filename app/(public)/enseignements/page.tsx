@@ -36,7 +36,7 @@ export default async function EnseignementsPage() {
             <div className="w-full h-full bg-[url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&q=80')] bg-cover bg-center grayscale contrast-125" />
         </div>
 
-        <div className="container relative z-20 mx-auto px-4 md:px-6">
+        <div className="container relative z-20 mx-auto px-8 md:px-16 lg:px-24 xl:px-32 max-w-[1600px]">
           <div className="max-w-3xl mx-auto text-center flex flex-col items-center">
             <div className="inline-flex items-center gap-2 bg-[#d4af37]/20 border border-[#d4af37]/30 rounded-full px-4 py-1.5 mb-6 backdrop-blur-md">
                 <Sparkles className="h-3.5 w-3.5 text-[#d4af37]" />
@@ -52,7 +52,7 @@ export default async function EnseignementsPage() {
             
             <p className="text-xl text-purple-100/80 leading-relaxed max-w-xl mb-8">
                 Nourrissez votre foi avec la profondeur de la parole révélée. Accédez à nos 
-                prédications et études bibliques en vidéo et format PDF.
+                prédications et études bibliques en vidéo.
             </p>
 
             <div className="flex items-center justify-center gap-6">
@@ -63,7 +63,7 @@ export default async function EnseignementsPage() {
                 <div className="h-4 w-px bg-white/10" />
                 <div className="flex items-center gap-2 text-white/60 text-sm">
                     <GraduationCap className="h-4 w-4 text-[#d4af37]" />
-                    <span>Supports PDF</span>
+                    <span>Études Bibliques</span>
                 </div>
             </div>
           </div>

@@ -9,7 +9,7 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "Ointjoyalaw Ministries",
+  title: "Joy Alawey Ministries",
   description: "Un ministère chrétien dédié à l'édification des âmes et l'annonce de l'Évangile. Événements, enseignements, dons et bien plus.",
 }
 

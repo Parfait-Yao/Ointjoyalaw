@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link"
 import { Calendar, MapPin, ArrowRight } from "lucide-react"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
@@ -13,9 +15,10 @@ interface EventProps {
   location?: string | null
   imageUrl?: string | null
   category?: string | null
+  organizations?: { id: string, name: string, acronym: string | null }[]
 }
 
-export function EventCard({ id, title, description, startDate, location, imageUrl, category }: EventProps) {
+export function EventCard({ id, title, description, startDate, location, imageUrl, category, organizations = [] }: EventProps) {
   const date = new Date(startDate)
   const day = format(date, "dd")
   const month = format(date, "MMM", { locale: fr }).replace('.', '')
@@ -57,6 +60,17 @@ export function EventCard({ id, title, description, startDate, location, imageUr
 
       {/* Content Section */}
       <div className="flex flex-col flex-1 p-8">
+        {/* Organizations Involved */}
+        {organizations.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-4">
+            {organizations.map((org) => (
+              <span key={org.id} className="inline-flex items-center px-3 py-1 rounded-lg bg-gray-50 border border-gray-100 text-[10px] font-black uppercase tracking-widest text-[#3b0a68]">
+                {org.acronym || org.name}
+              </span>
+            ))}
+          </div>
+        )}
+        
         <h3 className="font-black text-2xl text-gray-900 mb-4 leading-tight group-hover:text-[#3b0a68] transition-colors duration-300 line-clamp-2">
           {title}
         </h3>

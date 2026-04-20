@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth"
 import { AdminSidebarProvider } from "@/components/admin/AdminSidebarContext"
 import { Sidebar } from "@/components/admin/Sidebar"
 import { AdminTopbar } from "@/components/admin/AdminTopbar"
+import { Toaster } from "@/components/ui/sonner"
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await getServerSession(authOptions)
@@ -24,6 +25,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           </main>
         </div>
       </div>
+      <Toaster position="top-right" richColors closeButton />
     </AdminSidebarProvider>
   )
 }

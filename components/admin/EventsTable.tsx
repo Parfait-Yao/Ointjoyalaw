@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { toast } from "sonner"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -28,6 +29,7 @@ interface EventRow {
   imageUrl?: string | null
   category?: string | null
   _count?: { tickets: number }
+  organizations?: { id: string; name: string; acronym: string | null }[]
 }
 
 interface EventsTableProps {
@@ -62,9 +64,10 @@ export function EventsTable({ events }: EventsTableProps) {
       })
       if (res.ok) {
         setDeleteModalOpen(false)
+        toast.success("Événement supprimé avec succès.")
         router.refresh()
       } else {
-        alert("Erreur lors de la suppression")
+        toast.error("Erreur lors de la suppression")
       }
     } catch (e) {
       console.error(e)
@@ -81,6 +84,7 @@ export function EventsTable({ events }: EventsTableProps) {
             <TableHead className="font-bold">Titre</TableHead>
             <TableHead className="font-bold">Catégorie</TableHead>
             <TableHead className="font-bold">Date</TableHead>
+            <TableHead className="font-bold">Organisations</TableHead>
             <TableHead className="font-bold">Lieu</TableHead>
             <TableHead className="text-center font-bold">Capacité</TableHead>
             <TableHead className="text-center font-bold">Billets</TableHead>
@@ -110,6 +114,19 @@ export function EventsTable({ events }: EventsTableProps) {
                     {format(date, "d MMM yyyy", { locale: fr })}
                     {isPast && <Badge variant="secondary" className="ml-2 text-xs opacity-60">Passé</Badge>}
                   </TableCell>
+                  <TableCell>
+                    <div className="flex flex-wrap gap-1">
+                      {event.organizations && event.organizations.length > 0 ? (
+                        event.organizations.map((org) => (
+                          <Badge key={org.id} variant="secondary" className="text-[9px] font-bold px-1.5 py-0 bg-gray-100 text-gray-600 border-none shrink-0">
+                            {org.acronym || org.name.substring(0, 3)}
+                          </Badge>
+                        ))
+                      ) : (
+                        <span className="text-gray-300 mx-auto">—</span>
+                      )}
+                    </div>
+                  </TableCell>
                   <TableCell className="text-gray-500">{event.location || "—"}</TableCell>
                   <TableCell className="text-center text-gray-600">{event.capacity ?? "∞"}</TableCell>
                   <TableCell className="text-center">
@@ -119,12 +136,25 @@ export function EventsTable({ events }: EventsTableProps) {
                     <Button 
                       variant="ghost" 
                       size="icon" 
+                      className="text-gray-400 hover:text-green-600 hover:bg-green-50 transition-all" 
+                      render={<Link href={`/admin/evenements/${event.id}/inscrits`} />}
+                    >
+                      <Users className="h-4 w-4" />
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
                       onClick={() => openPreview(event)}
                       className="text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-all"
                     >
                       <Eye className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" className="text-gray-400 hover:text-purple-700 hover:bg-purple-50 transition-all" render={<Link href={`/admin/evenements/${event.id}`} />}>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="text-gray-400 hover:text-purple-700 hover:bg-purple-50 transition-all" 
+                      render={<Link href={`/admin/evenements/${event.id}`} />}
+                    >
                       <Pencil className="h-4 w-4" />
                     </Button>
                     <Button 
@@ -203,6 +233,16 @@ export function EventsTable({ events }: EventsTableProps) {
                   {selectedEvent?.location || "Lieu non défini"}
                 </div>
               </div>
+              {selectedEvent?.organizations && selectedEvent.organizations.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-gray-100">
+                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mr-2 py-1">Partenaires:</span>
+                  {selectedEvent.organizations.map((org) => (
+                    <Badge key={org.id} className="bg-purple-50 text-purple-700 border-purple-100 font-bold text-[10px] uppercase px-3 py-1">
+                      {org.name} {org.acronym && `(${org.acronym})`}
+                    </Badge>
+                  ))}
+                </div>
+              )}
             </DialogHeader>
 
             <div className="space-y-6">

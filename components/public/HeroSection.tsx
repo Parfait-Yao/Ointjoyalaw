@@ -7,7 +7,7 @@ export function HeroSection() {
     <section className="relative w-full min-h-screen bg-white overflow-hidden flex flex-col">
 
       {/* ── Main hero area ─────────────────────────── */}
-      <div className="flex-1 flex flex-col lg:flex-row items-center px-6 md:px-10 lg:px-16 pt-28 pb-6 md:pt-12 gap-10 lg:gap-0 max-w-[1400px] mx-auto w-full">
+      <div className="flex-1 flex flex-col lg:flex-row items-center px-8 md:px-16 lg:px-24 xl:px-32 pt-28 pb-6 md:pt-12 gap-10 lg:gap-0 max-w-[1600px] mx-auto w-full">
 
         {/* ── Left: Text ─────────────────────────────── */}
         <div className="flex-1 z-10 lg:pr-10">
@@ -15,7 +15,7 @@ export function HeroSection() {
           <div className="inline-flex items-center gap-2 bg-[#f4ecf9] border border-[#3b0a68]/15 rounded-full px-4 py-1.5 mb-8">
             <span className="w-2 h-2 rounded-full bg-[#d4af37] animate-pulse" />
             <span className="text-xs font-semibold tracking-widest text-[#3b0a68] uppercase">
-              Bienvenue chez Ointjoyalaw Ministries
+              Bienvenue chez Joy Alawey Ministries
             </span>
           </div>
 
@@ -62,8 +62,9 @@ export function HeroSection() {
           <div className="absolute inset-0 rounded-[2rem] overflow-hidden">
             <Image
               src="/images/church-building.png"
-              alt="Église Ointjoyalaw Ministries"
+              alt="Église Joy Alawey Ministries"
               fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover object-center"
               priority
             />
@@ -86,8 +87,8 @@ export function HeroSection() {
       </div>
 
       {/* ── Bottom bar — like the reference search/filter bar ── */}
-      <div className="w-full border-t border-gray-100 bg-white px-6 md:px-10 lg:px-16 py-5">
-        <div className="max-w-[1400px] mx-auto flex flex-col sm:flex-row items-center gap-4 sm:gap-0 divide-y sm:divide-y-0 sm:divide-x divide-gray-100">
+      <div className="w-full border-t border-gray-100 bg-white px-8 md:px-16 lg:px-24 xl:px-32 py-5">
+        <div className="max-w-[1600px] mx-auto flex flex-col sm:flex-row items-center gap-4 sm:gap-0 divide-y sm:divide-y-0 sm:divide-x divide-gray-100">
 
           <div className="flex items-center gap-3 sm:pr-10 w-full sm:w-auto">
             <MapPin className="h-4 w-4 text-[#3b0a68] shrink-0" />

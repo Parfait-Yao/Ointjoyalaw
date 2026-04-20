@@ -20,6 +20,7 @@ const navGroups = [
     items: [
       { href: "/admin/evenements", icon: Calendar, label: "Événements" },
       { href: "/admin/enseignements", icon: BookOpen, label: "Enseignements" },
+      { href: "/admin/organisations", icon: Users, label: "Organisations" },
     ]
   },
   {

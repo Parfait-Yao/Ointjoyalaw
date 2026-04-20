@@ -34,7 +34,7 @@ export function AdminTopbar() {
         </button>
         <div>
           <h1 className="font-bold text-gray-900 text-sm md:text-base leading-none">{title}</h1>
-          <p className="hidden md:block text-[10px] text-gray-400 uppercase tracking-widest mt-0.5">Ointjoyalaw Ministries</p>
+          <p className="hidden md:block text-[10px] text-gray-400 uppercase tracking-widest mt-0.5">Joy Alawey Ministries</p>
         </div>
       </div>
       <div className="flex items-center gap-3">

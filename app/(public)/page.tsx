@@ -13,6 +13,7 @@ export const dynamic = "force-dynamic"
 export default async function HomePage() {
   const events = await prisma.event.findMany({
     where: { startDate: { gte: new Date() } },
+    include: { organizations: true },
     orderBy: { startDate: 'asc' },
     take: 3
   })
@@ -23,12 +24,21 @@ export default async function HomePage() {
     take: 4,
   })
 
-  const organizations = [
-    { name: "Let There Be Joy", acronym: "LTBJ", description: "Notre programme caritatif pour apporter la joie." },
-    { name: "ARMES", acronym: "AR", description: "Association pour la restauration des mœurs étudiantes." },
-    { name: "MCA", acronym: "MC", description: "Mouvement Chrétien des Artistes, promouvoir l'art saint." },
-    { name: "AMES", acronym: "AM", description: "Association des Médecins Évangéliques du Salut." },
+  // Fetch actual organizations
+  const dbOrganizations = await prisma.organization.findMany({
+    orderBy: { createdAt: "desc" },
+    take: 4,
+  })
+
+  // Fallback if DB is empty
+  const defaultOrgs = [
+    { id: "1", name: "Let There Be Joy", acronym: "LTBJ", description: "Notre programme caritatif pour apporter la joie." },
+    { id: "2", name: "ARMES", acronym: "AR", description: "Association pour la restauration des mœurs étudiantes." },
+    { id: "3", name: "MCA", acronym: "MC", description: "Mouvement Chrétien des Artistes, promouvoir l'art saint." },
+    { id: "4", name: "AMES", acronym: "AM", description: "Association des Médecins Évangéliques du Salut." },
   ]
+
+  const displayOrganizations = dbOrganizations.length > 0 ? dbOrganizations : defaultOrgs
 
   return (
     <div>
@@ -36,7 +46,7 @@ export default async function HomePage() {
 
       {/* Prochains Événements Section */}
       <section className="py-20 bg-white">
-        <div className="container mx-auto px-4 md:px-6">
+        <div className="container mx-auto px-8 md:px-16 lg:px-24 xl:px-32 max-w-[1600px]">
           <div className="flex justify-between items-end mb-10">
             <div>
               <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-2">Prochains Événements</h2>
@@ -73,7 +83,7 @@ export default async function HomePage() {
         <div className="absolute bottom-0 right-1/4 w-80 h-80 rounded-full bg-indigo-400/20 blur-3xl" />
         <div className="absolute top-1/2 left-0 w-64 h-64 rounded-full bg-violet-600/10 blur-2xl" />
 
-        <div className="relative z-10 container mx-auto px-4 md:px-6">
+        <div className="relative z-10 container mx-auto px-8 md:px-16 lg:px-24 xl:px-32 max-w-[1600px]">
           {/* Section header */}
           <div className="text-center max-w-2xl mx-auto mb-14">
             <span className="inline-flex items-center gap-1.5 text-purple-300 text-xs font-semibold tracking-widest uppercase mb-3">
@@ -109,7 +119,7 @@ export default async function HomePage() {
 
       {/* Équipe Pastorale Section */}
       <section className="py-24 bg-[#fafafa]">
-        <div className="container mx-auto px-4 md:px-6">
+        <div className="container mx-auto px-8 md:px-16 lg:px-24 xl:px-32 max-w-[1600px]">
           <div className="max-w-2xl mx-auto text-center mb-16">
             <span className="inline-flex items-center gap-2 text-[#3b0a68] text-xs font-semibold tracking-widest uppercase mb-4">
               <span className="w-8 h-px bg-[#d4af37]" />
@@ -156,9 +166,11 @@ export default async function HomePage() {
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4 md:px-6">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-12 text-center">Nos Organisations Affiliées</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {organizations.map((org: any) => (
-              <OrganizationCard key={org.acronym} {...org} />
+          <div className="flex flex-wrap justify-center gap-6">
+            {displayOrganizations.map((org: any, idx: number) => (
+              <div key={org.id || org.acronym} className="w-full sm:w-[calc(50%-1.5rem)] md:w-[calc(33.33%-1.5rem)] lg:w-[calc(25%-1.5rem)] max-w-[320px]">
+                <OrganizationCard {...org} idx={idx} />
+              </div>
             ))}
           </div>
         </div>

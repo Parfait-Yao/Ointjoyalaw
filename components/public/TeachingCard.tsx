@@ -1,6 +1,6 @@
 "use client"
 
-import { Play, FileText, BookOpen, CalendarDays, X } from "lucide-react"
+import { Play, BookOpen, CalendarDays, Heart } from "lucide-react"
 import { useState } from "react"
 import { Badge } from "@/components/ui/badge"
 import {
@@ -17,7 +17,6 @@ interface TeachingProps {
   youtubeUrl?: string | null
   videoUrl?: string | null
   imageUrl?: string | null
-  pdfUrl?: string | null
   category?: string | null
   publishedAt: Date | string
 }
@@ -27,11 +26,11 @@ export function TeachingCard({
   youtubeUrl, 
   videoUrl, 
   imageUrl,
-  pdfUrl, 
   category, 
   publishedAt 
 }: TeachingProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const [liked, setLiked] = useState(false)
   
   const date = new Date(publishedAt).toLocaleDateString("fr-FR", {
     day: "numeric",
@@ -39,11 +38,7 @@ export function TeachingCard({
     year: "numeric",
   })
 
-  const getYoutubeIdInternal = (url: string | null | undefined) => {
-    if (!url) return null
-    const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/)
-    return match ? match[1] : null
-  }
+
 
   const ytId = getYoutubeId(youtubeUrl)
   const ytThumbnail = ytId ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` : null
@@ -99,32 +94,34 @@ export function TeachingCard({
           {title}
         </h3>
 
-        <div className="mt-auto grid grid-cols-2 gap-4">
-          {hasVideo ? (
-            uploadTypeLogic(youtubeUrl, videoUrl, title, isOpen, setIsOpen)
-          ) : (
-             <div className="flex items-center justify-center gap-3 rounded-full py-4 text-xs font-bold bg-gray-50 text-gray-300 cursor-not-allowed">
-              <Play className="w-4 h-4" />
-              ARCHIVÉ
-            </div>
-          )}
+        <div className="mt-auto flex items-center gap-3">
+          <div className="flex-1">
+            {hasVideo ? (
+              uploadTypeLogic(youtubeUrl, videoUrl, title, isOpen, setIsOpen)
+            ) : (
+              <div className="flex items-center justify-center gap-3 rounded-full py-4 text-xs font-bold bg-gray-50 text-gray-300 cursor-not-allowed">
+                <Play className="w-4 h-4" />
+                ARCHIVÉ
+              </div>
+            )}
+          </div>
           
-          {pdfUrl ? (
-            <a
-              href={pdfUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group/btn flex items-center justify-center gap-3 rounded-full py-4 text-xs font-bold border-2 border-gray-100 text-gray-600 hover:border-[#3b0a68] hover:text-[#3b0a68] transition-all duration-300"
-            >
-              <FileText className="w-4 h-4 transition-transform group-hover/btn:-translate-y-0.5" />
-              NOTES PDF
-            </a>
-          ) : (
-            <div className="flex items-center justify-center gap-3 rounded-full py-4 text-xs font-bold border-2 border-gray-50 text-gray-200 cursor-not-allowed">
-              <FileText className="w-4 h-4" />
-              INDISPONIBLE
-            </div>
-          )}
+          <button
+            type="button"
+            onClick={() => setLiked(!liked)}
+            className={`group/heart w-14 h-14 shrink-0 rounded-full border-2 flex items-center justify-center transition-all duration-300 active:scale-90 ${
+              liked
+                ? "bg-red-50 border-red-200 text-red-500 shadow-lg shadow-red-500/20"
+                : "bg-white border-gray-100 text-gray-300 hover:border-gray-200 hover:text-gray-400"
+            }`}
+            aria-label={liked ? "Retirer des favoris" : "Ajouter aux favoris"}
+          >
+            <Heart
+              className={`w-5 h-5 transition-all duration-300 group-hover/heart:scale-110 ${
+                liked ? "fill-red-500 text-red-500" : ""
+              }`}
+            />
+          </button>
         </div>
       </div>
     </div>
@@ -141,12 +138,12 @@ function uploadTypeLogic(youtubeUrl: string | null | undefined, videoUrl: string
           render={
             <button
               type="button"
-              className="group/btn flex items-center justify-center gap-3 rounded-full py-4 text-xs font-bold bg-[#3b0a68] text-white hover:bg-[#2d0852] transition-all duration-300 shadow-xl shadow-purple-900/20"
+              className="group/btn w-full flex items-center justify-center gap-3 rounded-2xl py-5 text-sm font-black uppercase tracking-wider bg-gradient-to-r from-[#3b0a68] to-[#5b1a98] text-white hover:from-[#2d0852] hover:to-[#4a1280] transition-all duration-300 shadow-xl shadow-purple-900/30 hover:shadow-2xl hover:shadow-purple-900/40 active:scale-[0.98]"
             />
           }
         >
-          <Play className="w-4 h-4 fill-current transition-transform group-hover/btn:scale-110" />
-          LIRE VIDÉO
+          <Play className="w-5 h-5 fill-current transition-transform group-hover/btn:scale-110" />
+          LIRE LA VIDÉO
         </DialogTrigger>
         <DialogContent className="max-w-4xl p-0 overflow-hidden bg-black border-none rounded-3xl">
           <div className="relative pt-[56.25%]">

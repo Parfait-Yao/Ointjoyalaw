@@ -2,7 +2,7 @@ import { DonationForm } from "@/components/public/DonationForm"
 
 export default function DonsPage() {
   return (
-    <div className="container mx-auto px-4 py-16">
+    <div className="container mx-auto px-8 md:px-16 lg:px-24 xl:px-32 max-w-[1600px] py-16">
       <div className="max-w-3xl mx-auto text-center mb-12">
         <h1 className="text-4xl font-bold tracking-tight text-gray-900 mb-4">Soutenir le Ministère</h1>
         <p className="text-lg text-gray-600">

@@ -32,6 +32,11 @@ export async function POST(req: Request) {
     const capacity = formData.get("capacity") as string | null
     const imageFile = formData.get("image") as File | null
     const category = formData.get("category") as string | null
+    const organizationIds = formData.getAll("organizationIds") as string[]
+    
+    const isFree = formData.get("isFree") === "true"
+    const priceStr = formData.get("price") as string | null
+    const price = !isFree && priceStr ? parseFloat(priceStr) : null
 
     if (!title || !startDate) {
       return NextResponse.json({ error: "Champs obligatoires manquants" }, { status: 400 })
@@ -54,6 +59,14 @@ export async function POST(req: Request) {
         capacity: capacity ? parseInt(capacity) : null,
         imageUrl,
         category: category || "Autre",
+        isFree,
+        price,
+        organizations: {
+          connect: organizationIds.map(id => ({ id }))
+        }
+      },
+      include: {
+        organizations: true
       }
     })
 

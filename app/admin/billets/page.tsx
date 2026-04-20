@@ -16,10 +16,10 @@ export default async function AdminTicketsPage() {
   const formattedTickets = tickets.map((t: any) => ({
     ...t,
     status: t.status as "PENDING" | "PAID" | "USED" | "CANCELLED",
-    ticketType: {
+    ticketType: t.ticketType ? {
       ...t.ticketType,
       price: Number(t.ticketType.price)
-    }
+    } : null
   }))
 
   return (

@@ -54,10 +54,13 @@ export default function LoginPage() {
 
         {/* Logo */}
         <div className="flex flex-col items-center mb-8">
-          <div className="w-14 h-14 rounded-2xl bg-purple-600 shadow-lg shadow-purple-900/60 flex items-center justify-center mb-4 animate-glow">
-            <Cross className="w-7 h-7 text-white" />
+          <div className="bg-white/10 p-4 rounded-3xl shadow-lg shadow-purple-900/60 mb-4 animate-glow">
+            <img 
+              src="/images/logo-site.png" 
+              alt="Joy Alawey Ministries" 
+              className="w-auto h-24 object-contain"
+            />
           </div>
-          <h1 className="text-white text-2xl font-bold tracking-tight">Ointjoyalaw</h1>
           <p className="text-purple-300/70 text-sm mt-1">Espace Administration</p>
         </div>
 
@@ -83,7 +86,7 @@ export default function LoginPage() {
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   required
-                  placeholder="admin@ointjoyalaw.com"
+                  placeholder="admin@joyalawey.com"
                   className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all"
                 />
               </div>
@@ -128,7 +131,7 @@ export default function LoginPage() {
         </div>
 
         <p className="text-center text-white/20 text-xs mt-6">
-          © {new Date().getFullYear()} Ointjoyalaw Ministries
+          © {new Date().getFullYear()} Joy Alawey Ministries
         </p>
       </div>
 

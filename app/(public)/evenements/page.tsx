@@ -6,6 +6,7 @@ export const dynamic = "force-dynamic"
 
 export default async function PublicEventsPage() {
   const events = await prisma.event.findMany({
+    include: { organizations: true },
     orderBy: { startDate: "asc" }
   })
 
@@ -42,7 +43,7 @@ export default async function PublicEventsPage() {
             <div className="absolute bottom-[20%] right-[5%] w-[30%] h-[40%] bg-[#d4af37]/10 rounded-full blur-3xl" />
         </div>
 
-        <div className="container relative z-20 mx-auto px-4 md:px-6">
+        <div className="container relative z-20 mx-auto px-8 md:px-16 lg:px-24 xl:px-32">
           <div className="max-w-3xl mx-auto text-center flex flex-col items-center">
             <div className="inline-flex items-center gap-2 bg-[#d4af37]/20 border border-[#d4af37]/30 rounded-full px-4 py-1.5 mb-6 backdrop-blur-md">
                 <Sparkles className="h-3.5 w-3.5 text-[#d4af37]" />

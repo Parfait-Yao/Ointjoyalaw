@@ -18,8 +18,9 @@ export async function sendEmail({
     return { id: "mock-id" }
   }
 
+  console.log(`EmailService: Sending email to ${to} with subject "${subject}"`)
   return await resend.emails.send({
-    from: "Ointjoyalaw Ministries <contact@ointjoyalaw.com>",
+    from: `Joy Alawey Ministries <${process.env.Email_RESEND || "contact@ointjoyalaw.com"}>`,
     to,
     subject,
     html,

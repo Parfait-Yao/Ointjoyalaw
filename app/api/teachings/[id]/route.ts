@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/lib/auth"
-import { uploadImageBuffer, uploadVideoBuffer, uploadPdfBuffer } from "@/lib/cloudinary"
+import { uploadImageBuffer, uploadVideoBuffer } from "@/lib/cloudinary"
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions)
@@ -16,18 +16,18 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     const formData = await req.formData()
     const title = formData.get("title") as string
     const youtubeUrlInput = formData.get("youtubeUrl") as string | null
-    const pdfUrlInput = formData.get("pdfUrl") as string | null
+
     const category = formData.get("category") as string | null
     const publishedAt = formData.get("publishedAt") as string | null
     const videoFile = formData.get("video") as File | null
-    const pdfFile = formData.get("pdf") as File | null
+
     const imageFile = formData.get("image") as File | null
 
     const currentTeaching = await prisma.teaching.findUnique({ where: { id } })
     if (!currentTeaching) return NextResponse.json({ error: "Not found" }, { status: 404 })
 
     let finalVideoUrl = currentTeaching.videoUrl
-    let finalPdfUrl = currentTeaching.pdfUrl
+
     let finalImageUrl = currentTeaching.imageUrl
 
     if (imageFile && imageFile.size > 0) {
@@ -40,12 +40,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       finalVideoUrl = await uploadVideoBuffer(buffer, "church/teachings/videos")
     }
 
-    if (pdfFile && pdfFile.size > 0) {
-      const buffer = Buffer.from(await pdfFile.arrayBuffer())
-      finalPdfUrl = await uploadPdfBuffer(buffer, "church/teachings/pdfs")
-    } else if (pdfUrlInput) {
-       finalPdfUrl = pdfUrlInput
-    }
+
 
     const teaching = await prisma.teaching.update({
       where: { id },
@@ -53,7 +48,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
         title: title || undefined,
         youtubeUrl: youtubeUrlInput === "" ? null : youtubeUrlInput || undefined,
         videoUrl: finalVideoUrl,
-        pdfUrl: finalPdfUrl,
+
         imageUrl: finalImageUrl,
         category: category || undefined,
         publishedAt: publishedAt ? new Date(publishedAt) : undefined,

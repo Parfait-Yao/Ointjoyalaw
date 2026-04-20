@@ -13,7 +13,8 @@ export async function GET(
     const event = await prisma.event.findUnique({
       where: { id },
       include: {
-        ticketTypes: true
+        ticketTypes: true,
+        organizations: true
       }
     })
     if (!event) return NextResponse.json({ error: "Événement non trouvé" }, { status: 404 })
@@ -42,6 +43,11 @@ export async function PATCH(
     const capacity = formData.get("capacity") as string | null
     const category = formData.get("category") as string | null
     const imageFile = formData.get("image") as File | null
+    const organizationIds = formData.getAll("organizationIds") as string[]
+    
+    const isFree = formData.get("isFree") === "true"
+    const priceStr = formData.get("price") as string | null
+    const price = !isFree && priceStr ? parseFloat(priceStr) : null
 
     const updateData: any = {
       title,
@@ -50,6 +56,11 @@ export async function PATCH(
       location: location || null,
       capacity: capacity ? parseInt(capacity) : null,
       category: category || "Autre",
+      isFree,
+      price: isFree ? null : price,
+      organizations: {
+        set: organizationIds.map(id => ({ id }))
+      }
     }
 
     if (imageFile && imageFile.size > 0) {
@@ -60,7 +71,10 @@ export async function PATCH(
 
     const event = await prisma.event.update({
       where: { id },
-      data: updateData
+      data: updateData,
+      include: {
+        organizations: true
+      }
     })
 
     return NextResponse.json(event)

@@ -1,10 +1,11 @@
 "use client"
 
 import { useState } from "react"
+import { toast } from "sonner"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Pencil, Trash2, AlertTriangle, Loader2, Eye, Play, FileText, Calendar, ExternalLink } from "lucide-react"
+import { Pencil, Trash2, AlertTriangle, Loader2, Eye, Play, Calendar } from "lucide-react"
 import { format } from "date-fns"
 import { fr } from "date-fns/locale"
 import Link from "next/link"
@@ -23,7 +24,7 @@ interface Teaching {
   title: string
   youtubeUrl: string | null
   videoUrl: string | null
-  pdfUrl: string | null
+
   category: string | null
   publishedAt: Date | string
 }
@@ -60,9 +61,10 @@ export function TeachingsTable({ teachings }: TeachingsTableProps) {
       })
       if (res.ok) {
         setDeleteModalOpen(false)
+        toast.success("Enseignement supprimé avec succès.")
         router.refresh()
       } else {
-        alert("Erreur lors de la suppression")
+        toast.error("Erreur lors de la suppression")
       }
     } catch (e) {
       console.error(e)
@@ -117,11 +119,7 @@ export function TeachingsTable({ teachings }: TeachingsTableProps) {
                                 <Play className="h-3 w-3" /> Vidéo
                             </div>
                         )}
-                        {t.pdfUrl && (
-                            <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 border border-blue-100 text-[10px] uppercase">
-                                <FileText className="h-3 w-3" /> PDF
-                            </div>
-                        )}
+
                     </div>
                   </TableCell>
                   <TableCell className="text-right px-6 space-x-1">
@@ -223,32 +221,7 @@ export function TeachingsTable({ teachings }: TeachingsTableProps) {
               )}
             </div>
 
-            {/* Resources Section */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className={`p-4 rounded-2xl border transition-all ${selectedTeaching?.pdfUrl ? 'bg-blue-50/50 border-blue-100 group' : 'bg-gray-50 border-gray-100 opacity-50'}`}>
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${selectedTeaching?.pdfUrl ? 'bg-blue-600 text-white shadow-lg' : 'bg-gray-200 text-gray-400'}`}>
-                            <FileText className="h-5 w-5" />
-                        </div>
-                        <div>
-                            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Notes PDF</p>
-                            <p className="text-sm font-bold text-gray-900">{selectedTeaching?.pdfUrl ? 'Document disponible' : 'Non disponible'}</p>
-                        </div>
-                    </div>
-                    {selectedTeaching?.pdfUrl && (
-                        <a 
-                            href={selectedTeaching.pdfUrl} 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="w-8 h-8 rounded-full bg-white border border-blue-100 flex items-center justify-center text-blue-600 hover:bg-blue-600 hover:text-white transition-all shadow-sm"
-                        >
-                            <ExternalLink className="h-4 w-4" />
-                        </a>
-                    )}
-                </div>
-              </div>
-
+            <div className="grid grid-cols-1 gap-4">
               <div className="p-4 rounded-2xl border border-gray-100 bg-gray-50">
                   <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center">

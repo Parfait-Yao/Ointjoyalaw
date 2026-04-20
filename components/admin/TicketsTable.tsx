@@ -8,9 +8,11 @@ interface TicketRow {
   qrCode: string
   status: "PENDING" | "PAID" | "USED" | "CANCELLED"
   createdAt: Date | string
-  user: { name: string | null; email: string }
+  user: { name: string | null; email: string } | null
+  guestName: string | null
+  guestEmail: string | null
   event: { title: string }
-  ticketType: { name: string; price: number | string }
+  ticketType: { name: string; price: number | string } | null
 }
 
 interface TicketsTableProps {
@@ -56,9 +58,15 @@ export function TicketsTable({ tickets }: TicketsTableProps) {
             tickets.map((ticket) => (
               <TableRow key={ticket.id}>
                 <TableCell className="font-medium">{ticket.event.title}</TableCell>
-                <TableCell>{ticket.user.name || ticket.user.email}</TableCell>
-                <TableCell>{ticket.ticketType.name}</TableCell>
-                <TableCell>{Number(ticket.ticketType.price).toLocaleString()} FCFA</TableCell>
+                <TableCell>
+                  {ticket.user ? (ticket.user.name || ticket.user.email) : (ticket.guestName || ticket.guestEmail || "Inconnu")}
+                </TableCell>
+                <TableCell>{ticket.ticketType?.name || "Standard"}</TableCell>
+                <TableCell>
+                  {(ticket.ticketType?.price !== undefined) 
+                    ? `${Number(ticket.ticketType.price).toLocaleString()} FCFA` 
+                    : "0 FCFA"}
+                </TableCell>
                 <TableCell>
                   <Badge className={statusColors[ticket.status]}>
                     {statusLabels[ticket.status]}

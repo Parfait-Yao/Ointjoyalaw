@@ -11,7 +11,7 @@ interface Teaching {
   youtubeUrl: string | null
   videoUrl: string | null
   imageUrl: string | null
-  pdfUrl: string | null
+
   category: string | null
   publishedAt: Date | string
 }

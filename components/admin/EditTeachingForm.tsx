@@ -2,8 +2,9 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { Loader2, BookOpen, Video, FileText, Calendar, Upload, Play } from "lucide-react"
+import { Loader2, BookOpen, Video, Calendar, Upload, Play } from "lucide-react"
 import Link from "next/link"
+import { toast } from "sonner"
 
 interface Teaching {
   id: string
@@ -11,7 +12,7 @@ interface Teaching {
   youtubeUrl: string | null
   videoUrl: string | null
   imageUrl: string | null
-  pdfUrl: string | null
+
   category: string | null
   publishedAt: Date
 }
@@ -25,7 +26,7 @@ export function EditTeachingForm({ teaching }: { teaching: Teaching }) {
   const [videoPreview, setVideoPreview] = useState<string | null>(teaching.videoUrl)
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(teaching.imageUrl)
-  const [pdfFile, setPdfFile] = useState<File | null>(null)
+
 
   const getYoutubeId = (url: string) => {
     const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/)
@@ -50,12 +51,7 @@ export function EditTeachingForm({ teaching }: { teaching: Teaching }) {
     }
   }
 
-  const handlePdfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      setPdfFile(file)
-    }
-  }
+
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -79,9 +75,7 @@ export function EditTeachingForm({ teaching }: { teaching: Teaching }) {
       submitData.append("image", imageFile)
     }
 
-    if (pdfFile) {
-      submitData.append("pdf", pdfFile)
-    }
+
 
     try {
       const res = await fetch(`/api/teachings/${teaching.id}`, {
@@ -89,14 +83,15 @@ export function EditTeachingForm({ teaching }: { teaching: Teaching }) {
         body: submitData,
       })
       if (res.ok) {
+        toast.success("Enseignement mis à jour avec succès !")
         router.push("/admin/enseignements")
         router.refresh()
       } else {
         const error = await res.json()
-        alert(`Erreur: ${error.error || "Inconnue"}`)
+        toast.error(`Erreur: ${error.error || "Inconnue"}`)
       }
     } catch {
-      alert("Erreur réseau")
+      toast.error("Erreur réseau")
     } finally {
       setLoading(false)
     }
@@ -232,31 +227,7 @@ export function EditTeachingForm({ teaching }: { teaching: Teaching }) {
             </div>
           )}
 
-          <div className="space-y-4 pt-4 border-t border-gray-100">
-            <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
-              <FileText className="w-4 h-4 text-purple-600" />
-              Notes PDF {teaching.pdfUrl ? "(Un PDF existe déjà)" : "(Optionnel)"}
-            </label>
-            
-            <div className="relative group">
-              <input type="file" accept=".pdf" onChange={handlePdfChange} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
-              <div className={`w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 flex items-center justify-between transition-all group-hover:border-purple-300 ${pdfFile ? 'bg-purple-50/30' : ''}`}>
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-white border border-gray-100 flex items-center justify-center text-purple-600">
-                    <FileText className="w-4 h-4" />
-                  </div>
-                  <span className="text-sm text-gray-500 truncate max-w-[200px]">
-                    {pdfFile ? pdfFile.name : teaching.pdfUrl ? "Remplacer le PDF actuel" : "Sélectionner un PDF"}
-                  </span>
-                </div>
-                {!pdfFile && !teaching.pdfUrl && (
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest bg-white px-2 py-1 rounded-md border border-gray-100">
-                    PDF uniquement
-                  </span>
-                )}
-              </div>
-            </div>
-          </div>
+
         </div>
 
         <div className="flex justify-end gap-3 pt-4">

@@ -3,7 +3,7 @@ import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/lib/auth"
-import { uploadImageBuffer, uploadVideoBuffer, uploadPdfBuffer } from "@/lib/cloudinary"
+import { uploadImageBuffer, uploadVideoBuffer } from "@/lib/cloudinary"
 
 export async function GET() {
   const teachings = await prisma.teaching.findMany({
@@ -22,17 +22,17 @@ export async function POST(req: Request) {
     const formData = await req.formData()
     const title = formData.get("title") as string
     const youtubeUrlInput = formData.get("youtubeUrl") as string | null
-    const pdfUrlInput = formData.get("pdfUrl") as string | null
+
     const category = formData.get("category") as string | null
     const publishedAt = formData.get("publishedAt") as string | null
     const videoFile = formData.get("video") as File | null
-    const pdfFile = formData.get("pdf") as File | null
+
     const imageFile = formData.get("image") as File | null
 
     if (!title) return NextResponse.json({ error: "Title required" }, { status: 400 })
 
     let finalVideoUrl = null
-    let finalPdfUrl = null
+
     let finalImageUrl = null
 
     // Handling Image Upload to Cloudinary
@@ -47,20 +47,14 @@ export async function POST(req: Request) {
       finalVideoUrl = await uploadVideoBuffer(buffer, "church/teachings/videos")
     }
 
-    // Handling PDF Upload to Cloudinary
-    if (pdfFile && pdfFile.size > 0) {
-      const buffer = Buffer.from(await pdfFile.arrayBuffer())
-      finalPdfUrl = await uploadPdfBuffer(buffer, "church/teachings/pdfs")
-    } else if (pdfUrlInput) {
-      finalPdfUrl = pdfUrlInput
-    }
+
 
     const teaching = await prisma.teaching.create({
       data: {
         title,
         youtubeUrl: youtubeUrlInput || null,
         videoUrl: finalVideoUrl,
-        pdfUrl: finalPdfUrl,
+
         imageUrl: finalImageUrl,
         category: category || "Foi",
         publishedAt: publishedAt ? new Date(publishedAt) : new Date(),

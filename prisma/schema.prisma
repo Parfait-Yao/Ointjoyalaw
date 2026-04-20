@@ -26,9 +26,12 @@ model Event {
   capacity    Int?
   imageUrl    String?
   category    String?
+  isFree      Boolean      @default(true)
+  price       Float?
   createdAt   DateTime     @default(now())
   tickets     Ticket[]
-  ticketTypes TicketType[]
+  ticketTypes   TicketType[]
+  organizations Organization[]
 }
 
 model TicketType {
@@ -45,14 +48,17 @@ model Ticket {
   id           String       @id @default(cuid())
   qrCode       String       @unique @default(cuid())
   status       TicketStatus @default(PENDING)
-  userId       String
+  userId       String?
   eventId      String
-  ticketTypeId String
+  ticketTypeId String?
+  guestName    String?
+  guestEmail   String?
+  guestPhone   String?
   createdAt    DateTime     @default(now())
   payment      Payment?
   event        Event        @relation(fields: [eventId], references: [id])
-  ticketType   TicketType   @relation(fields: [ticketTypeId], references: [id])
-  user         User         @relation(fields: [userId], references: [id])
+  ticketType   TicketType?  @relation(fields: [ticketTypeId], references: [id])
+  user         User?        @relation(fields: [userId], references: [id])
 }
 
 model Payment {
@@ -109,12 +115,24 @@ enum TicketStatus {
 }
 
 enum PaymentMethod {
-  STRIPE
-  CINETPAY
+  CENTRAL_APIS
 }
 
 enum PaymentStatus {
   PENDING
   COMPLETED
   FAILED
+}
+
+model Organization {
+  id           String    @id @default(cuid())
+  name         String
+  acronym      String?
+  role         String?
+  description  String?
+  creationDate DateTime?
+  imageUrl     String?
+  websiteUrl   String?
+  events       Event[]
+  createdAt    DateTime  @default(now())
 }

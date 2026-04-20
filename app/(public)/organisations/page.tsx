@@ -1,37 +1,63 @@
-"use client"
-
-import { OrganizationCard } from "@/components/public/OrganizationCard"
-import { Globe, Heart, Sparkles, Star } from "lucide-react"
+import { Globe, Heart, Sparkles, Star, CalendarDays, ExternalLink } from "lucide-react"
 import NextImage from "next/image"
 import Link from "next/link"
+import { prisma } from "@/lib/prisma"
+import { format } from "date-fns"
+import { fr } from "date-fns/locale"
+import { OrganizationCard } from "@/components/public/OrganizationCard"
 
-export default function OrganisationsPage() {
-  const organizations = [
+export const dynamic = "force-dynamic"
+
+export default async function OrganisationsPage() {
+  const organizationsDb = await prisma.organization.findMany({
+    orderBy: { createdAt: "asc" }
+  })
+
+  // Fallback organizations if DB is empty
+  const defaultOrgs = [
     {
+      id: "1",
       name: "Let There Be Joy",
       acronym: "LTBJ",
       description: "Fondée sur le principe de partager le bonheur de Christ, LTBJ mène des actions caritatives, visite les orphelinats et apporte de l'aide aux personnes démunies.",
-      website: "#"
+      role: "Action Sociale",
+      websiteUrl: "#",
+      imageUrl: null,
+      creationDate: null
     },
     {
+      id: "2",
       name: "ARMES",
       acronym: "AR",
       description: "Association pour la Restauration des Mœurs Étudiantes et Scolaires. Ce mouvement vise à inculquer des valeurs morales et chrétiennes à la jeunesse en milieu scolaire.",
-      website: "#"
+      role: "Éducation",
+      websiteUrl: "#",
+      imageUrl: null,
+      creationDate: null
     },
     {
+      id: "3",
       name: "Mouvement Chrétien des Artistes",
       acronym: "MCA",
       description: "Un regroupement d'artistes chrétiens dédiés à utiliser leur art pour la gloire de Dieu et l'édification de l'Église.",
-      website: "#"
+      role: "Arts & Culture",
+      websiteUrl: "#",
+      imageUrl: null,
+      creationDate: null
     },
     {
+      id: "4",
       name: "Association des Médecins Évangéliques du Salut",
       acronym: "AMES",
       description: "Des professionnels de la santé chrétiens qui offrent des consultations gratuites et des campagnes de dépistage, alliant guérison physique et spirituelle.",
-      website: "#"
+      role: "Santé",
+      websiteUrl: "#",
+      imageUrl: null,
+      creationDate: null
     },
   ]
+
+  const displayOrgs = organizationsDb.length > 0 ? organizationsDb : defaultOrgs
 
   const cloudImages = [
     { url: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=800", height: "h-48 md:h-64", mt: "mt-12" },
@@ -41,9 +67,24 @@ export default function OrganisationsPage() {
     { url: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=800", height: "h-64 md:h-80", mt: "mt-4" },
   ]
 
-
   return (
     <div className="bg-white min-h-screen">
+      <style dangerouslySetInnerHTML={{__html: `
+        @keyframes float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-15px); }
+        }
+        .animate-float {
+          animation: float 6s ease-in-out infinite;
+        }
+        @keyframes fade-in {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+          animation: fade-in 1s ease-out forwards;
+        }
+      `}} />
 
       {/* ── PURPLE LUXE BANNER ────────────────────────────── */}
       <section className="relative min-h-[400px] md:h-[450px] flex items-center justify-center overflow-hidden pt-24 pb-12 md:pt-0 md:pb-0">
@@ -56,7 +97,7 @@ export default function OrganisationsPage() {
           <div className="w-full h-full bg-[url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80')] bg-cover bg-center grayscale contrast-125" />
         </div>
 
-        <div className="container relative z-20 mx-auto px-4 md:px-6 text-center">
+        <div className="container relative z-20 mx-auto px-8 md:px-16 lg:px-24 xl:px-32 max-w-[1600px] text-center">
           <div className="inline-flex items-center gap-2 bg-[#d4af37]/20 border border-[#d4af37]/30 rounded-full px-4 py-1.5 mb-8 backdrop-blur-md animate-fade-in">
             <Sparkles className="h-3.5 w-3.5 text-[#d4af37]" />
             <span className="text-[10px] font-bold tracking-[0.2em] text-[#d4af37] uppercase">
@@ -90,7 +131,7 @@ export default function OrganisationsPage() {
 
       {/* ── IMAGE CLOUD GALLERY (TESTIMONIAL GRID STYLE) ────── */}
       <section className="py-20 overflow-hidden bg-white">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-8 md:px-16 lg:px-24 xl:px-32 max-w-[1600px]">
           <div className="flex flex-wrap justify-center gap-4 md:gap-6 items-start">
             {cloudImages.map((img: any, idx: number) => (
               <div
@@ -103,7 +144,7 @@ export default function OrganisationsPage() {
                   alt="Impact"
                   fill
                   className="object-cover"
-                  sizes="(max-w-768px) 128px, 192px"
+                  sizes="(max-width: 768px) 128px, 192px"
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#3b0a68]/20" />
               </div>
@@ -111,51 +152,37 @@ export default function OrganisationsPage() {
           </div>
         </div>
       </section>
+      
       {/* ── ORGANISATIONS GRID ────────────────────────────── */}
-      <section className="py-24 bg-[#fafafa]">
-        <div className="container mx-auto px-4">
-          {/* Testimonials Style - Organization Grid */}
-          <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-            {organizations.map((org: any, idx: number) => (
-              <div
-                key={idx}
-                className="bg-white p-8 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] border border-gray-100 text-left flex flex-col items-start hover:shadow-[0_40px_80px_rgba(59,10,104,0.08)] transition-all duration-500 group"
-              >
-                <div className="flex gap-1 mb-6">
-                  {[1, 2, 3, 4, 5].map((i: number) => (
-                    <Star key={i} className="h-4 w-4 fill-[#d4af37] text-[#d4af37]" />
-                  ))}
+      <section className="py-32 bg-[#fafafa]">
+        <div className="container mx-auto px-8 md:px-16 lg:px-24 xl:px-32 max-w-[1600px]">
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-16 pt-12">
+            {displayOrgs.map((org: any, idx: number) => {
+              return (
+                <div key={org.id} className="w-full sm:w-[calc(50%-1.5rem)] md:w-[calc(33.33%-1.5rem)] lg:w-[calc(25%-1.5rem)] max-w-[320px]">
+                  <OrganizationCard {...org} />
                 </div>
+              )
+            })}
+          </div>
 
-                <p className="text-gray-600 font-medium leading-relaxed mb-8 flex-1">
-                  &quot;{org.description}&quot;
-                </p>
-
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-[#f4ecf9] flex items-center justify-center font-black text-[#3b0a68] text-sm group-hover:bg-[#3b0a68] group-hover:text-white transition-colors duration-300">
-                    {org.acronym}
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-gray-900 leading-none mb-1">{org.name}</h3>
-                    <p className="text-xs text-[#d4af37] font-bold uppercase tracking-widest leading-none">Organisation Affiliée</p>
-                  </div>
-                </div>
+          {/* Special Call to Action Card separated from the grid layout */}
+          <div className="max-w-4xl mx-auto mt-32">
+            <div className="bg-[#3b0a68] p-10 rounded-[2.5rem] shadow-2xl text-center flex flex-col items-center text-white group relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl" />
+              <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl" />
+              
+              <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center mb-6 relative z-10">
+                <Sparkles className="h-8 w-8 text-[#d4af37]" />
               </div>
-            ))}
-
-            {/* Special Call to Action Card */}
-            <div className="bg-[#3b0a68] p-8 rounded-[2rem] shadow-2xl text-left flex flex-col items-start text-white group cursor-pointer hover:scale-[1.02] transition-transform duration-300">
-              <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center mb-6">
-                <Sparkles className="h-6 w-6 text-[#d4af37]" />
-              </div>
-              <h3 className="text-2xl font-black mb-4">Rejoindre une Mission ?</h3>
-              <p className="text-purple-100/70 font-medium mb-8">
+              <h3 className="text-3xl font-black mb-4 relative z-10">Rejoindre une Mission ?</h3>
+              <p className="text-purple-100/80 font-medium mb-8 max-w-lg relative z-10">
                 Vous avez un talent, une expertise ou simplement le désir de servir ?
-                Il y a une place pour vous dans nos missions.
+                Il y a une place pour vous dans nos missions et organisations.
               </p>
               <Link
                 href="/contact"
-                className="mt-auto bg-[#d4af37] text-[#3b0a68] font-black rounded-xl px-6 py-3 text-sm uppercase tracking-widest hover:bg-white transition-colors"
+                className="relative z-10 bg-[#d4af37] text-[#3b0a68] font-black rounded-xl px-8 py-4 text-sm uppercase tracking-widest hover:bg-white transition-all hover:scale-105"
               >
                 Nous Contacter
               </Link>
@@ -163,24 +190,6 @@ export default function OrganisationsPage() {
           </div>
         </div>
       </section>
-
-      {/* Global Style for Animations */}
-      <style jsx global>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-15px); }
-        }
-        .animate-float {
-          animation: float 6s ease-in-out infinite;
-        }
-        @keyframes fade-in {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in {
-          animation: fade-in 1s ease-out forwards;
-        }
-      `}</style>
     </div>
   )
 }

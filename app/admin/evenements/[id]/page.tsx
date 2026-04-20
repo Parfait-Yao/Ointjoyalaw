@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { ArrowLeft, Loader2, Save, Trash2, AlertTriangle } from "lucide-react"
 import Link from "next/link"
+import { toast } from "sonner"
 import {
   Dialog,
   DialogContent,
@@ -24,6 +25,9 @@ export default function EditEventPage({ params }: { params: Promise<{ id: string
   const [fetching, setFetching] = useState(true)
   const [event, setEvent] = useState<any>(null)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [organizations, setOrganizations] = useState<any[]>([])
+  const [associatedOrgIds, setAssociatedOrgIds] = useState<string[]>([])
+  const [isFree, setIsFree] = useState(true)
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -32,8 +36,9 @@ export default function EditEventPage({ params }: { params: Promise<{ id: string
         if (res.ok) {
           const data = await res.json()
           setEvent(data)
+          setIsFree(data.isFree ?? true)
         } else {
-          alert("Événement non trouvé")
+          toast.error("Événement non trouvé")
           router.push("/admin/evenements")
         }
       } catch (err) {
@@ -43,13 +48,33 @@ export default function EditEventPage({ params }: { params: Promise<{ id: string
       }
     }
     fetchEvent()
+
+    const fetchAllOrgs = async () => {
+      try {
+        const res = await fetch("/api/organizations")
+        if (res.ok) {
+          const data = await res.json()
+          setOrganizations(data)
+        }
+      } catch (err) {
+        console.error("Failed to fetch all organizations", err)
+      }
+    }
+    fetchAllOrgs()
   }, [resolvedParams.id, router])
+
+  useEffect(() => {
+    if (event?.organizations) {
+      setAssociatedOrgIds(event.organizations.map((o: any) => o.id))
+    }
+  }, [event])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setLoading(true)
 
     const formData = new FormData(e.currentTarget)
+    formData.append("isFree", isFree.toString())
 
     try {
       const res = await fetch(`/api/events/${resolvedParams.id}`, {
@@ -57,14 +82,15 @@ export default function EditEventPage({ params }: { params: Promise<{ id: string
         body: formData,
       })
       if (res.ok) {
+        toast.success("Événement modifié avec succès !")
         router.push("/admin/evenements")
         router.refresh()
       } else {
-        alert("Erreur lors de la mise à jour")
+        toast.error("Erreur lors de la mise à jour")
       }
     } catch (e) {
       console.error(e)
-      alert("Erreur réseau")
+      toast.error("Erreur réseau")
     } finally {
       setLoading(false)
     }
@@ -77,10 +103,11 @@ export default function EditEventPage({ params }: { params: Promise<{ id: string
         method: "DELETE",
       })
       if (res.ok) {
+        toast.success("Événement supprimé avec succès.")
         router.push("/admin/evenements")
         router.refresh()
       } else {
-        alert("Erreur lors de la suppression")
+        toast.error("Erreur lors de la suppression")
         setShowDeleteModal(false)
       }
     } catch (e) {
@@ -151,6 +178,54 @@ export default function EditEventPage({ params }: { params: Promise<{ id: string
             </div>
           </div>
 
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label className="text-gray-700 font-semibold flex items-center gap-2">
+                Tarification *
+              </Label>
+              <div className="flex items-center gap-4 h-10">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input 
+                    type="radio" 
+                    name="tarification" 
+                    checked={isFree}
+                    onChange={() => setIsFree(true)}
+                    className="w-4 h-4 text-purple-600 focus:ring-purple-500"
+                  />
+                  <span className="text-sm font-medium text-gray-700">Gratuit</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input 
+                    type="radio" 
+                    name="tarification" 
+                    checked={!isFree}
+                    onChange={() => setIsFree(false)}
+                    className="w-4 h-4 text-purple-600 focus:ring-purple-500"
+                  />
+                  <span className="text-sm font-medium text-gray-700">Payant</span>
+                </label>
+              </div>
+            </div>
+
+            {!isFree && (
+              <div className="space-y-2">
+                <Label htmlFor="price" className="text-gray-700 font-semibold flex items-center gap-2">
+                   Prix (FCFA) *
+                </Label>
+                <Input 
+                  id="price" 
+                  name="price" 
+                  type="number" 
+                  min="0" 
+                  required={!isFree}
+                  defaultValue={event?.price || ""}
+                  className="w-full"
+                  placeholder="Ex: 5000" 
+                />
+              </div>
+            )}
+          </div>
+
           <div className="space-y-2">
             <Label htmlFor="location">Lieu</Label>
             <Input id="location" name="location" defaultValue={event?.location || ""} />
@@ -172,6 +247,37 @@ export default function EditEventPage({ params }: { params: Promise<{ id: string
               <option value="Conférence">Conférence</option>
               <option value="Autre">Autre</option>
             </select>
+          </div>
+
+          <div className="space-y-3">
+            <Label>Organisations impliquées</Label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 bg-gray-50 rounded-xl border border-gray-100">
+              {organizations.length > 0 ? (
+                organizations.map((org) => (
+                  <label key={org.id} className="flex items-center gap-3 p-2 hover:bg-white rounded-lg transition-colors cursor-pointer group">
+                    <input 
+                      type="checkbox" 
+                      name="organizationIds" 
+                      value={org.id}
+                      defaultChecked={associatedOrgIds.includes(org.id)}
+                      className="w-4 h-4 rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+                    />
+                    <div className="flex flex-col">
+                      <span className="text-sm font-semibold text-gray-700 group-hover:text-purple-700 transition-colors">
+                        {org.name}
+                      </span>
+                      {org.acronym && (
+                        <span className="text-[10px] text-gray-400 uppercase tracking-widest font-bold">
+                          {org.acronym}
+                        </span>
+                      )}
+                    </div>
+                  </label>
+                ))
+              ) : (
+                <p className="text-xs text-gray-400 italic col-span-full">Chargement des organisations...</p>
+              )}
+            </div>
           </div>
 
           <div className="space-y-2">

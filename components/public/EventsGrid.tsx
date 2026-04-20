@@ -14,6 +14,7 @@ interface Event {
   capacity: number | null
   imageUrl: string | null
   category: string | null
+  organizations?: { id: string, name: string, acronym: string | null }[]
 }
 
 interface EventsGridProps {
