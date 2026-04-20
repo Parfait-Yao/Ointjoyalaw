@@ -13,13 +13,14 @@ export async function createCheckoutSession(
     include: { ticketType: true, user: true, event: true }
   })
 
-  if (!ticket) throw new Error("Ticket not found")
-  if (!ticket.ticketType) throw new Error("Ticket type not found")
+  if (!ticket) throw new Error("Ticket not found");
+  const ticketType = ticket.ticketType;
+  if (!ticketType) throw new Error("Ticket type not found");
 
   // Create pending payment in DB
   const payment = await prisma.payment.create({
     data: {
-      amount: ticket.ticketType.price,
+      amount: ticketType.price,
       method,
       ticketId: ticket.id,
       currency: "XOF"
@@ -29,7 +30,7 @@ export async function createCheckoutSession(
   if (method === "CENTRAL_APIS") {
     const response = await initiateCentralApiDeposit({
       numberClient: ticket.guestPhone || "",
-      amount: Number(ticket.ticketType.price),
+      amount: Number(ticketType.price),
       typeService: "MTN",
       reference: payment.id,
     })
