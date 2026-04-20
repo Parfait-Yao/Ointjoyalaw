@@ -11,18 +11,29 @@ import { ArrowRight } from "lucide-react"
 export const dynamic = "force-dynamic"
 
 export default async function HomePage() {
-  const events = await prisma.event.findMany({
+  const eventsData = await prisma.event.findMany({
     where: { startDate: { gte: new Date() } },
     include: { organizations: true },
     orderBy: { startDate: 'asc' },
     take: 3
   })
 
+  const events = eventsData.map(e => ({
+    ...e,
+    startDate: e.startDate.toISOString(),
+  }))
+
   // Real teachings from DB
-  const teachings = await prisma.teaching.findMany({
+  const teachingsData = await prisma.teaching.findMany({
     orderBy: { publishedAt: "desc" },
     take: 4,
   })
+
+  // Serialize dates for Client Components
+  const teachings = teachingsData.map(t => ({
+    ...t,
+    publishedAt: t.publishedAt.toISOString(),
+  }))
 
   // Fetch actual organizations
   const dbOrganizations = await prisma.organization.findMany({
