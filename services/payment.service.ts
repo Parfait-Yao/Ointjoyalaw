@@ -15,6 +15,7 @@ export async function createCheckoutSession(
   })
 
   if (!ticket) throw new Error("Ticket not found")
+  if (!ticket.ticketType) throw new Error("Ticket type not found")
 
   // Create pending payment in DB
   const payment = await prisma.payment.create({
