@@ -32,7 +32,7 @@ export async function GET(
       imageUrl: ticket.event.imageUrl || undefined,
     })
 
-    return new Response(pdfBuffer, {
+    return new Response(new Uint8Array(pdfBuffer), {
       headers: {
         "Content-Type": "application/pdf",
         "Content-Disposition": `attachment; filename="billet-${ticket.id}.pdf"`,
