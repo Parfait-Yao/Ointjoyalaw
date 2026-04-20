@@ -1,7 +1,7 @@
 "use client"
 
 import { Play, BookOpen, CalendarDays, Heart } from "lucide-react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Badge } from "@/components/ui/badge"
 import {
   Dialog,
