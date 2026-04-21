@@ -1,5 +1,5 @@
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -18,20 +18,20 @@ model User {
 }
 
 model Event {
-  id          String       @id @default(cuid())
-  title       String
-  description String?
-  startDate   DateTime
-  location    String?
-  capacity    Int?
-  imageUrl    String?
-  category    String?
-  isFree      Boolean      @default(true)
-  price       Float?
-  createdAt   DateTime     @default(now())
-  tickets     Ticket[]
+  id            String         @id @default(cuid())
+  title         String
+  description   String?
+  startDate     DateTime
+  location      String?
+  capacity      Int?
+  imageUrl      String?
+  category      String?
+  createdAt     DateTime       @default(now())
+  isFree        Boolean        @default(true)
+  price         Float?
+  tickets       Ticket[]
   ticketTypes   TicketType[]
-  organizations Organization[]
+  organizations Organization[] @relation("EventToOrganization")
 }
 
 model TicketType {
@@ -51,10 +51,10 @@ model Ticket {
   userId       String?
   eventId      String
   ticketTypeId String?
-  guestName    String?
-  guestEmail   String?
-  guestPhone   String?
   createdAt    DateTime     @default(now())
+  guestEmail   String?
+  guestName    String?
+  guestPhone   String?
   payment      Payment?
   event        Event        @relation(fields: [eventId], references: [id])
   ticketType   TicketType?  @relation(fields: [ticketTypeId], references: [id])
@@ -102,6 +102,19 @@ model Newsletter {
   createdAt DateTime @default(now())
 }
 
+model Organization {
+  id           String    @id @default(cuid())
+  name         String
+  acronym      String?
+  role         String?
+  description  String?
+  creationDate DateTime?
+  imageUrl     String?
+  websiteUrl   String?
+  createdAt    DateTime  @default(now())
+  events       Event[]   @relation("EventToOrganization")
+}
+
 enum Role {
   VISITOR
   ADMIN
@@ -115,6 +128,8 @@ enum TicketStatus {
 }
 
 enum PaymentMethod {
+  STRIPE
+  CINETPAY
   CENTRAL_APIS
 }
 
@@ -122,17 +137,4 @@ enum PaymentStatus {
   PENDING
   COMPLETED
   FAILED
-}
-
-model Organization {
-  id           String    @id @default(cuid())
-  name         String
-  acronym      String?
-  role         String?
-  description  String?
-  creationDate DateTime?
-  imageUrl     String?
-  websiteUrl   String?
-  events       Event[]
-  createdAt    DateTime  @default(now())
 }
